@@ -6,6 +6,10 @@ services:
     container_name: arrangement_service
     environment:
       DEBUG_PORT: ${DEBUG_PORT}
+      DB_PORT: ${DB_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "${nTLS_PORT}:${nTLS_PORT}"
       - "${TLS_PORT}:${TLS_PORT}"

@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - logicalFilePath: 20240919_create-groups-table.yml
+  - changeSet:
+      id: 20240919_issue-5
+      author: Malyshev Yaroslav
+      comment: db initialization
+      changes:
+        - createTable:
+            tableName: groups
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: guid
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: scheduled_for
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: group_data
+                  type: jsonb
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: guid
+            indexName: group_guid_idx
+            tableName: groups
+        - sql:
+            sql: "CREATE INDEX member_guid_idx ON groups USING btree ((group_data -> 'members' ->> 'guid'));"
+
+      rollback:
+        - dropTable:
+            tableName: groups
