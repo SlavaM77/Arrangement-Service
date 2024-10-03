@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 20240919_create-groups-table.yml
+      relativeToChangelogFile: true
