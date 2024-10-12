@@ -17,6 +17,7 @@
         <maven.checkstyle.version>3.5.0</maven.checkstyle.version>
         <checkstyle.puppycrawl.version>10.18.1</checkstyle.puppycrawl.version>
 		<instancio.version>5.0.2</instancio.version>
+		<org.mapstruct.version>1.6.2</org.mapstruct.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -46,6 +47,10 @@
 		</dependency>
 
 		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
@@ -53,6 +58,16 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${org.mapstruct.version}</version>
 		</dependency>
 
 		<dependency>
