@@ -11,3 +11,4 @@ spring:
     user: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     change-log: classpath:db/changelog/changelog-master.yml
+

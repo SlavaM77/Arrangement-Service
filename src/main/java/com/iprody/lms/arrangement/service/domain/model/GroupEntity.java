@@ -34,11 +34,13 @@ public class GroupEntity {
 
     @NonNull
     @Column("created_at")
-    private Instant createdAt;
+    @Builder.Default
+    private Instant createdAt = Instant.now();
 
     @NonNull
     @Column("updated_at")
-    private Instant updatedAt;
+    @Builder.Default
+    private Instant updatedAt = Instant.now();
 
     @NonNull
     @Column("scheduled_for")

@@ -11,7 +11,7 @@ import static com.iprody.lms.arrangement.service.repository.query.constants.Quer
 import static com.iprody.lms.arrangement.service.repository.query.constants.QueryConstants.ROLE_FIELD;
 
 /**
- * {@link Sorting} realizations for sorting by mentor's (teacher's) 'lastName' field.
+ * {@link Sorting} implementation for sorting by mentor's (teacher's) 'lastName' field.
  */
 
 public class MentorSorting extends Sorting {

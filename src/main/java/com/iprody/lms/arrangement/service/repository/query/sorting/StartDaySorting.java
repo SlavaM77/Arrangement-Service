@@ -5,7 +5,7 @@ import org.springframework.data.domain.Sort;
 import static com.iprody.lms.arrangement.service.repository.query.constants.QueryConstants.SCHEDULED_FOR_FIELD;
 
 /**
- * {@link Sorting} realizations for sorting by group's 'scheduledFor' field.
+ * {@link Sorting} implementation for sorting by group's 'scheduledFor' field.
  */
 
 public class StartDaySorting extends Sorting {
