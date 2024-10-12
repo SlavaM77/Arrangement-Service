@@ -20,6 +20,16 @@ public class QueryConstants {
     public static final String LASTNAME_FIELD = "lastName";
     public static final String ROLE_FIELD = "role";
     public static final String MENTOR_ROLE = MemberRole.TEACHER.name();
+    public static final int DEFAULT_OFFSET = 0;
+    public static final int DEFAULT_PAGE_SIZE = 10;
+    public static final int DEFAULT_PAGE = 1;
+
+    public static final String STRING_PARAM = "'%s'";
+    public static final String SET_EXPRESSION = "%s = %s";
+    public static final String MEMBERS_QUERY = "jsonb_set({0}, '''{'{1}'}''', ''{2}'')";
+    public static final String SCHEDULE_QUERY = "jsonb_set({0}, ''{1}'', {2})";
+    public static final String MENTOR_SORTING_QUERY =
+            "(SELECT jsonb_path_query_first({0},''$.{1}[*] ? (@.{2} == \"{3}\").{4}'')::text)";
 
     static {
         try {

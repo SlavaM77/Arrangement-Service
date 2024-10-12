@@ -2,3 +2,6 @@ databaseChangeLog:
   - include:
       file: 20240919_create-groups-table.yml
       relativeToChangelogFile: true
+  - include:
+      file: 20241008_create-update-trigger.yml
+      relativeToChangelogFile: true

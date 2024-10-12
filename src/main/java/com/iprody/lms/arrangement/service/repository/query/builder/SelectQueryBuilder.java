@@ -1,4 +1,4 @@
-package com.iprody.lms.arrangement.service.repository.query;
+package com.iprody.lms.arrangement.service.repository.query.builder;
 
 import com.iprody.lms.arrangement.service.repository.query.filters.Filter;
 import com.iprody.lms.arrangement.service.repository.query.pagination.Pagination;
@@ -7,7 +7,10 @@ import lombok.NonNull;
 
 import java.util.List;
 
-public class QueryBuilder {
+import static com.iprody.lms.arrangement.service.repository.query.constants.QueryConstants.DEFAULT_OFFSET;
+import static com.iprody.lms.arrangement.service.repository.query.constants.QueryConstants.DEFAULT_PAGE_SIZE;
+
+public class SelectQueryBuilder {
 
     private static final String WHITESPACE = " ";
     private static final String SELECT = "SELECT";
@@ -17,14 +20,12 @@ public class QueryBuilder {
     private static final String ORDER_BY = "ORDER BY";
     private static final String LIMIT = "LIMIT";
     private static final String OFFSET = "OFFSET";
-    private static final int DEFAULT_PAGE = 1;
-    private static final int DEFAULT_PAGE_SIZE = 10;
 
-    public static SelectStep create() {
+    public static SelectClause create() {
         return new Steps();
     }
 
-    private static class Steps implements SelectStep, FromStep, WhereStep, OrderByStep, PaginateStep {
+    private static class Steps implements SelectClause, FromClause, WhereClause, OrderByClause, PaginateClause {
 
         private final StringBuilder queryBuilder = new StringBuilder();
 
@@ -32,7 +33,7 @@ public class QueryBuilder {
         }
 
         @Override
-        public FromStep select(@NonNull String selectFields) {
+        public FromClause select(@NonNull String selectFields) {
             queryBuilder.append(SELECT)
                     .append(WHITESPACE)
                     .append(selectFields)
@@ -41,7 +42,7 @@ public class QueryBuilder {
         }
 
         @Override
-        public WhereStep from(@NonNull String tableName) {
+        public WhereClause from(@NonNull String tableName) {
             queryBuilder.append(FROM)
                     .append(WHITESPACE)
                     .append(tableName)
@@ -50,7 +51,7 @@ public class QueryBuilder {
         }
 
         @Override
-        public OrderByStep where(List<Filter> filters) {
+        public OrderByClause where(List<Filter> filters) {
             if (filters != null && !filters.isEmpty()) {
                 queryBuilder.append(WHERE)
                         .append(WHITESPACE)
@@ -68,11 +69,11 @@ public class QueryBuilder {
         }
 
         @Override
-        public PaginateStep orderBy(Sorting sorting) {
+        public PaginateClause orderBy(Sorting sorting) {
             if (sorting != null) {
                 queryBuilder.append(ORDER_BY)
                         .append(WHITESPACE)
-                        .append(sorting.getSortingBy())
+                        .append(sorting.getSortingClause())
                         .append(WHITESPACE)
                         .append(sorting.getSortDirection())
                         .append(WHITESPACE);
@@ -88,7 +89,7 @@ public class QueryBuilder {
                     .append(WHITESPACE)
                     .append(OFFSET)
                     .append(WHITESPACE)
-                    .append(pagination != null ? (pagination.page() - 1) * pagination.size() : DEFAULT_PAGE);
+                    .append(pagination != null ? (pagination.page() - 1) * pagination.size() : DEFAULT_OFFSET);
             return this;
         }
 
@@ -98,23 +99,23 @@ public class QueryBuilder {
         }
     }
 
-    public interface SelectStep {
-        FromStep select(@NonNull String selectFields);
+    public interface SelectClause {
+        FromClause select(@NonNull String selectFields);
     }
 
-    public interface FromStep {
-        WhereStep from(@NonNull String tableName);
+    public interface FromClause {
+        WhereClause from(@NonNull String tableName);
     }
 
-    public interface WhereStep extends OrderByStep {
-        OrderByStep where(List<Filter> filters);
+    public interface WhereClause extends OrderByClause {
+        OrderByClause where(List<Filter> filters);
     }
 
-    public interface OrderByStep extends PaginateStep {
-        PaginateStep orderBy(Sorting sorting);
+    public interface OrderByClause extends PaginateClause {
+        PaginateClause orderBy(Sorting sorting);
     }
 
-    public interface PaginateStep extends BuildStep {
+    public interface PaginateClause extends BuildStep {
         BuildStep paginate(Pagination pagination);
     }
 

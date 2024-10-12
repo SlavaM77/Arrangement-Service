@@ -1,4 +1,4 @@
-package com.iprody.lms.arrangement.service.repository.query;
+package com.iprody.lms.arrangement.service.repository.query.builder;
 
 import com.iprody.lms.arrangement.service.domain.enums.MemberRole;
 import com.iprody.lms.arrangement.service.repository.query.filters.Filter;
@@ -6,10 +6,9 @@ import com.iprody.lms.arrangement.service.repository.query.filters.GroupNameFilt
 import com.iprody.lms.arrangement.service.repository.query.filters.MemberFilter;
 import com.iprody.lms.arrangement.service.repository.query.filters.StartDateFilter;
 import com.iprody.lms.arrangement.service.repository.query.pagination.Pagination;
-import com.iprody.lms.arrangement.service.repository.query.sorting.MentorSorting;
-import com.iprody.lms.arrangement.service.repository.query.sorting.StartDaySorting;
+import com.iprody.lms.arrangement.service.repository.query.sorting.Sorting;
+import com.iprody.lms.arrangement.service.repository.query.sorting.SortingType;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Sort;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -19,16 +18,16 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class QueryBuilderTest {
+class SelectQueryBuilderTest {
 
     private final static String TABLE_NAME = "test_table";
     private final static String SELECTED_FIELDS = "*";
 
     @Test
-    void shouldBuildSelectSqlClause_withoutAdditionalParams_successfully() {
+    void shouldBuildSelectSqlQuery_withoutAdditionalParams_successfully() {
         String expected = String.format("SELECT %s FROM %s", SELECTED_FIELDS, TABLE_NAME);
 
-        String result = QueryBuilder.create()
+        String result = SelectQueryBuilder.create()
                 .select(SELECTED_FIELDS)
                 .from(TABLE_NAME)
                 .build();
@@ -37,7 +36,7 @@ class QueryBuilderTest {
     }
 
     @Test
-    void shouldBuildSelectSqlClause_withFilters_successfully() {
+    void shouldBuildSelectSqlQuery_withFilters_successfully() {
         String groupNameSearch = "group";
         Instant fromTime = Instant.now();
         Instant toTime = fromTime.plus(1, ChronoUnit.DAYS);
@@ -65,7 +64,7 @@ class QueryBuilderTest {
                 .replaceAll("\\s+", " ")
                 .trim();
 
-        String result = QueryBuilder.create()
+        String result = SelectQueryBuilder.create()
                 .select(SELECTED_FIELDS)
                 .from(TABLE_NAME)
                 .where(filters)
@@ -75,8 +74,8 @@ class QueryBuilderTest {
     }
 
     @Test
-    void shouldBuildSelectSqlClause_withSorting_successfully() {
-        MentorSorting mentorSorting = new MentorSorting(Sort.Direction.DESC);
+    void shouldBuildSelectSqlQuery_withSorting_successfully() {
+        Sorting mentorSorting = new Sorting(SortingType.MENTOR_TYPE, "desc");
 
         String expected = """
                 SELECT %s FROM %s
@@ -87,7 +86,7 @@ class QueryBuilderTest {
                 .replaceAll("\\s+", " ")
                 .trim();
 
-        String result = QueryBuilder.create()
+        String result = SelectQueryBuilder.create()
                 .select(SELECTED_FIELDS)
                 .from(TABLE_NAME)
                 .orderBy(mentorSorting)
@@ -97,12 +96,12 @@ class QueryBuilderTest {
     }
 
     @Test
-    void shouldBuildSelectSqlClause_withPagination_successfully() {
+    void shouldBuildSelectSqlQuery_withPagination_successfully() {
         Pagination pagination = new Pagination(2, 25);
 
         String expected = String.format("SELECT %s FROM %s LIMIT 25 OFFSET 25", SELECTED_FIELDS, TABLE_NAME);
 
-        String result = QueryBuilder.create()
+        String result = SelectQueryBuilder.create()
                 .select(SELECTED_FIELDS)
                 .from(TABLE_NAME)
                 .paginate(pagination)
@@ -112,16 +111,16 @@ class QueryBuilderTest {
     }
 
     @Test
-    void shouldBuildSelectSqlClause_withAllAdditionalParams_successfully() {
+    void shouldBuildSelectSqlQuery_withAllAdditionalParams_successfully() {
         String groupNameSearch = "group";
         Instant searchTime = Instant.now();
         List<String> internGuids = List.of(UUID.randomUUID().toString(), UUID.randomUUID().toString());
         List<Filter> filters = List.of(
                 new GroupNameFilter(groupNameSearch),
-                new StartDateFilter(searchTime, StartDateFilter.Expression.EQUAL),
+                new StartDateFilter(searchTime, StartDateFilter.Expression.FROM),
                 new MemberFilter(internGuids, MemberRole.INTERN)
         );
-        StartDaySorting startDaySorting = new StartDaySorting(Sort.Direction.DESC);
+        Sorting startDaySorting = new Sorting(SortingType.START_DAY_SORTING, "desc");
         Pagination pagination = new Pagination(3, 15);
 
         String internGuidsStr = internGuids.stream()
@@ -130,7 +129,7 @@ class QueryBuilderTest {
         String expected = """
                 SELECT %s FROM %s
                 WHERE name ILIKE '%%%s%%'
-                AND scheduled_for = '%s'
+                AND scheduled_for >= '%s'
                 AND EXISTS (SELECT * FROM jsonb_array_elements(group_data->'members') AS member
                             WHERE member->>'guid' = ANY(ARRAY[%s])
                             AND member->>'role' = '%s')
@@ -141,7 +140,7 @@ class QueryBuilderTest {
                 .replaceAll("\\s+", " ")
                 .trim();
 
-        String result = QueryBuilder.create()
+        String result = SelectQueryBuilder.create()
                 .select(SELECTED_FIELDS)
                 .from(TABLE_NAME)
                 .where(filters)

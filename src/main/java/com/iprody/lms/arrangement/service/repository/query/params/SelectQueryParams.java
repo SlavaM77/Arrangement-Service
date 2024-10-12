@@ -1,4 +1,4 @@
-package com.iprody.lms.arrangement.service.repository.query;
+package com.iprody.lms.arrangement.service.repository.query.params;
 
 import com.iprody.lms.arrangement.service.repository.query.filters.Filter;
 import com.iprody.lms.arrangement.service.repository.query.sorting.Sorting;
@@ -15,7 +15,7 @@ import java.util.List;
  * </ul>
  */
 
-public record QueryParams(
+public record SelectQueryParams(
         List<Filter> filters,
         Sorting sorting,
         Pagination pagination
