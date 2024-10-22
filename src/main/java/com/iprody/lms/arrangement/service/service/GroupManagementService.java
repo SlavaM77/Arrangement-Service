@@ -4,6 +4,7 @@ import com.iprody.lms.arrangement.service.domain.model.Course;
 import com.iprody.lms.arrangement.service.domain.model.GroupEntity;
 import com.iprody.lms.arrangement.service.domain.model.Member;
 import com.iprody.lms.arrangement.service.dto.request.AddGroupRequestDto;
+import com.iprody.lms.arrangement.service.dto.request.GroupRequestMeta;
 import com.iprody.lms.arrangement.service.dto.request.UpdateGroupRequestDto;
 import com.iprody.lms.arrangement.service.dto.response.GroupPageResponseDto;
 import com.iprody.lms.arrangement.service.dto.response.GroupResponseDto;
@@ -44,12 +45,8 @@ public class GroupManagementService {
                 .map(mapper::fromEntity);
     }
 
-    public Mono<GroupPageResponseDto> getGroupsByParams() {
-        // todo - add realization according discussed meta language
-        SelectQueryParams params = new SelectQueryParams(
-                null,
-                null,
-                null);
+    public Mono<GroupPageResponseDto> getGroupsByParams(GroupRequestMeta meta) {
+        SelectQueryParams params = groupProcessingService.collectParamsForSelect(meta);
         return repository.findByParams(params)
                 .map(mapper::toPageResponse);
     }

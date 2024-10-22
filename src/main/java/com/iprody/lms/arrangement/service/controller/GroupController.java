@@ -1,6 +1,7 @@
 package com.iprody.lms.arrangement.service.controller;
 
 import com.iprody.lms.arrangement.service.dto.request.AddGroupRequestDto;
+import com.iprody.lms.arrangement.service.dto.request.GroupRequestMeta;
 import com.iprody.lms.arrangement.service.dto.request.UpdateGroupRequestDto;
 import com.iprody.lms.arrangement.service.dto.response.GroupPageResponseDto;
 import com.iprody.lms.arrangement.service.dto.response.GroupResponseDto;
@@ -47,8 +48,8 @@ public class GroupController {
             @ApiResponse(responseCode = "500", description = "Internal server error occurred")
     })
     @GetMapping
-    public Mono<GroupPageResponseDto> getGroupsByParams() {
-        return service.getGroupsByParams();
+    public Mono<GroupPageResponseDto> getGroupsByParams(@Valid GroupRequestMeta meta) {
+        return service.getGroupsByParams(meta);
     }
 
     @Operation(summary = "Update an existing group")

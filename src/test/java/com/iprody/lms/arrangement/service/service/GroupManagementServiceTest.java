@@ -4,12 +4,16 @@ import com.iprody.lms.arrangement.service.domain.model.Course;
 import com.iprody.lms.arrangement.service.domain.model.GroupEntity;
 import com.iprody.lms.arrangement.service.domain.model.Member;
 import com.iprody.lms.arrangement.service.dto.request.AddGroupRequestDto;
+import com.iprody.lms.arrangement.service.dto.request.GroupRequestMeta;
 import com.iprody.lms.arrangement.service.dto.request.UpdateGroupRequestDto;
+import com.iprody.lms.arrangement.service.dto.response.GroupPageResponseDto;
 import com.iprody.lms.arrangement.service.dto.response.GroupResponseDto;
 import com.iprody.lms.arrangement.service.exception.EntityNotFoundException;
 import com.iprody.lms.arrangement.service.integration.courceservice.CourseService;
 import com.iprody.lms.arrangement.service.integration.userprofile.UserProfileService;
 import com.iprody.lms.arrangement.service.repository.GroupRepository;
+import com.iprody.lms.arrangement.service.repository.query.pagination.Page;
+import com.iprody.lms.arrangement.service.repository.query.params.SelectQueryParams;
 import com.iprody.lms.arrangement.service.repository.query.params.UpdateQueryParams;
 import com.iprody.lms.arrangement.service.service.processors.GroupProcessingService;
 import org.instancio.Instancio;
@@ -169,5 +173,30 @@ class GroupManagementServiceTest {
         verify(userProfileService, times(1)).getMembersByGuids(dto.memberGuids());
         verify(groupProcessingService, never()).collectParamsForUpdate(any(), any(), any());
         verify(repository, never()).update(any(), any());
+    }
+
+    @Test
+    void shouldRetrieveGroupPage_successfully() {
+        GroupRequestMeta meta = Instancio.create(GroupRequestMeta.class);
+        SelectQueryParams params = Instancio.create(SelectQueryParams.class);
+        Page<GroupEntity> page = new Page<>(2L, Instancio.ofList(GroupEntity.class).size(2).create());
+
+        when(groupProcessingService.collectParamsForSelect(meta)).thenReturn(params);
+        when(repository.findByParams(params)).thenReturn(Mono.just(page));
+
+        Mono<GroupPageResponseDto> result = groupManagementService.getGroupsByParams(meta);
+
+        StepVerifier.create(result)
+                .consumeNextWith(responseDto -> {
+                    assertThat(responseDto)
+                            .extracting(GroupPageResponseDto::totalCount, GroupPageResponseDto::groups)
+                            .matches(tuple -> tuple.getFirst().equals(2L) && !((List<?>) tuple.getLast()).isEmpty());
+                    assertThat(responseDto.groups())
+                            .doesNotContainNull();
+                })
+                .verifyComplete();
+
+        verify(groupProcessingService).collectParamsForSelect(meta);
+        verify(repository).findByParams(params);
     }
 }

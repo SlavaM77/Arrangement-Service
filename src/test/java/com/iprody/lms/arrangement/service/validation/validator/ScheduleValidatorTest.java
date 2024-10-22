@@ -1,8 +1,7 @@
-package com.iprody.lms.arrangement.service.validator;
+package com.iprody.lms.arrangement.service.validation.validator;
 
 import com.iprody.lms.arrangement.service.dto.request.MeetRequestDto;
 import com.iprody.lms.arrangement.service.dto.request.ScheduleDto;
-import com.iprody.lms.arrangement.service.validation.validator.ScheduleValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

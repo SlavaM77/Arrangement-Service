@@ -31,7 +31,7 @@ public class StartDateFilter implements Filter {
     @Getter
     @RequiredArgsConstructor
     public enum Expression {
-        FROM(">="), TO("<="), EQUAL("=");
+        FROM(">="), TO("<=");
 
         private final String symbol;
     }
