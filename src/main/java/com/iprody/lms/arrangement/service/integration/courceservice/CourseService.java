@@ -1,24 +1,29 @@
 package com.iprody.lms.arrangement.service.integration.courceservice;
 
 import com.iprody.lms.arrangement.service.domain.model.Course;
+import com.iprody.lms.arrangement.service.exception.EntityNotFoundException;
+import com.iprody.lms.arrangement.service.integration.mappers.CourseTemplateMapperImpl;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.UUID;
+import java.text.MessageFormat;
 
 @Service
+@RequiredArgsConstructor
 public class CourseService {
 
-    public Mono<Course> getCourseByGuid(String courseGuid) {
-        // todo - complete realization
-        return Mono.just(mock());
-    }
+    private final CourseServiceClient client;
 
-    private Course mock() {
-        return Course.builder()
-                .guid(UUID.randomUUID().toString())
-                .summary("Summary")
-                .description("Description")
-                .build();
+    public Mono<Course> getCourseByGuid(String guid) {
+        if (StringUtils.isBlank(guid)) {
+            return Mono.error(new IllegalArgumentException("Course guid must not be null or empty."));
+        }
+
+        return client.getCourse(guid)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException(
+                        MessageFormat.format("Course with guid ''{0}'' not found in the Course service", guid))))
+                .map(new CourseTemplateMapperImpl()::toModel);
     }
 }
