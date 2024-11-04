@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - logicalFilePath: 20241008_create-update-trigger.yml
+  - changeSet:
+      id: 20241008_issue-8
+      author: Malyshev Yaroslav
+      comment: create trigger for setting updated_at column for any row update
+      changes:
+        - sqlFile:
+            path: sql/group-update-trigger.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: sql/group-update-trigger.sql
+            relativeToChangelogFile: true

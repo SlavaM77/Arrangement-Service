@@ -4,10 +4,12 @@ import com.iprody.lms.arrangement.service.domain.enums.MemberRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
+@EqualsAndHashCode(of = "guid")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

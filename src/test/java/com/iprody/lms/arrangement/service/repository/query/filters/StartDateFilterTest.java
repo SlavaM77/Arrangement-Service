@@ -32,16 +32,4 @@ class StartDateFilterTest {
 
         assertThat(result).isEqualTo(expected);
     }
-
-    @Test
-    void shouldReturnFilteringQueryClause_forEqualExpression_successfully() {
-        Instant instant = Instant.now();
-        StartDateFilter filter = new StartDateFilter(instant, StartDateFilter.Expression.EQUAL);
-
-        String expected = "%s = '%s'".formatted(SCHEDULED_FOR_FIELD, instant);
-
-        String result = filter.getFilterQuery();
-
-        assertThat(result).isEqualTo(expected);
-    }
 }

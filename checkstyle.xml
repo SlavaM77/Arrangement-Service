@@ -58,6 +58,11 @@
                   value="^package.*|^import.*|href\s*=\s*&quot;[^&quot;]*&quot;|http://|https://|ftp://"/>
     </module>
 
+    <module name="RegexpMultiline">
+        <property name="format" value="\n\s*\n\s*\}"/>
+        <property name="message" value="Empty line before closing brace is not allowed."/>
+    </module>
+
     <module name="TreeWalker">
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">
@@ -382,6 +387,12 @@
             <property name="checkFormat" value="$1"/>
             <!-- The check is suppressed in the next line of code after the comment -->
             <property name="influenceFormat" value="1"/>
+        </module>
+        <module name="EmptyLineSeparator">
+            <!-- Limit to a single empty line between code sections -->
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
         </module>
     </module>
 </module>
