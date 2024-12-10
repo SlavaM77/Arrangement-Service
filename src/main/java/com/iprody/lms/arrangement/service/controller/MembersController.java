@@ -31,6 +31,7 @@ public class MembersController {
             @ApiResponse(responseCode = "200", description = "Member successfully added",
                     content = @Content(schema = @Schema(implementation = MemberResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "404", description = "Requested resource not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error occurred")
     })
     @PostMapping()
@@ -43,6 +44,7 @@ public class MembersController {
             @ApiResponse(responseCode = "200", description = "Member successfully deactivated",
                     content = @Content(schema = @Schema(implementation = MemberResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "404", description = "Requested resource not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error occurred")
     })
     @PutMapping()

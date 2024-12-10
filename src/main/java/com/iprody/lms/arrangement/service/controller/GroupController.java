@@ -33,6 +33,7 @@ public class GroupController {
             @ApiResponse(responseCode = "200", description = "The Group was successfully created",
                     content = @Content(schema = @Schema(implementation = GroupResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "404", description = "Requested resource not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error occurred")
     })
     @PostMapping
@@ -57,6 +58,7 @@ public class GroupController {
             @ApiResponse(responseCode = "200", description = "Group successfully updated",
                     content = @Content(schema = @Schema(implementation = GroupResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "404", description = "Requested resource not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error occurred")
     })
     @PutMapping

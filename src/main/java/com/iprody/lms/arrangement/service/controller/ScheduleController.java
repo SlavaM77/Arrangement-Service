@@ -31,6 +31,7 @@ public class ScheduleController {
             @ApiResponse(responseCode = "200", description = "Schedule successfully added",
                     content = @Content(schema = @Schema(implementation = ScheduleResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "404", description = "Requested resource not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error occurred")
     })
     @PostMapping()
@@ -43,6 +44,7 @@ public class ScheduleController {
             @ApiResponse(responseCode = "200", description = "Schedule successfully updated",
                     content = @Content(schema = @Schema(implementation = ScheduleResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "404", description = "Requested resource not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error occurred")
     })
     @PutMapping()
@@ -55,6 +57,7 @@ public class ScheduleController {
             @ApiResponse(responseCode = "200", description = "Meet successfully marked as completed",
                     content = @Content(schema = @Schema(implementation = ScheduleResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "404", description = "Requested resource not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error occurred")
     })
     @PutMapping("/meet/complete")
